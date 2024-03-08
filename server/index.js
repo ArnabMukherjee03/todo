@@ -1,7 +1,7 @@
 require('dotenv').config();
 const server = require("./src/app");
 const {connectDB} = require("./src/db/database")
-
+const path = require('path');
 
 // Database Connection
 connectDB();
@@ -18,5 +18,7 @@ connectDB();
         }
     }
 )();
+
+console.log(path.resolve('./src', 'models'));
 
 

@@ -1,15 +1,15 @@
 const ApiError = require("../utils/ApiError");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user.model")
+const Boom = require('@hapi/boom');
+const {User} = require("../models")
 
 exports.verifyJwt = async (req,res)=>{
       
-        const {accessToken} = await req.state;
-
-        console.log("Token",accessToken);
+        const accessToken = req.state?.accessToken || req.headers.authorization?.replace("Bearer ", "");
+        console.log(accessToken);
 
         if(!accessToken){
-            throw new ApiError(401,"Unauthorized Request")
+            throw Boom.badRequest("Unauthorized access");
         }
 
         const decodedToken = jwt.verify(accessToken,process.env.TOKEN_SECRET);
@@ -17,15 +17,19 @@ exports.verifyJwt = async (req,res)=>{
         console.log(decodedToken);
 
         const user = await User.findOne({
-            where: {id: decodedToken._id},
+            where: {id: decodedToken.id},
             attributes: {exclude: ['password']}
          })
 
          if(!user){
-            throw new ApiError(401,"Invalid Access Token");
+            throw Boom.badRequest("Invalid Access Token");
          }
 
-         req.user = user;
+
+         console.log(decodedToken);
+       
+
+         req.user = decodedToken;
 
         return res.continue;
     

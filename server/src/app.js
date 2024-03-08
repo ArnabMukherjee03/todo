@@ -8,11 +8,11 @@ const server = Hapi.server({
     host: "localhost",
     "routes": {
         "cors": {
-            "origin": ["http://localhost:5173"],
-            "headers": ["Accept", "Content-Type"],
-            "additionalHeaders": ["X-Requested-With"]
+            origin: ["http://localhost:3000"],
+            headers: ["Accept", "Content-Type"],
+            additionalHeaders: ["X-Requested-With"]
         }
-    }
+    }    
 });
 
 

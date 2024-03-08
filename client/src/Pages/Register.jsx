@@ -1,10 +1,10 @@
-import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom'; // Make sure to have react-router-dom installed
+import { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // Make sure to have react-router-dom installed
 import { authContext } from '../Context/AuthContext';
 
 const Register = () => {
-  const {handleRegister} = useContext(authContext);
-
+  const {handleRegister,token} = useContext(authContext);
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,6 +18,12 @@ const Register = () => {
     }) 
   };
 
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [token, navigate]);
+
   return (
     <div className="font-primary flex items-center justify-center h-screen">
       <form className="bg-white p-8 rounded shadow-md w-96" onSubmit={handleSubmit}>
@@ -30,6 +36,7 @@ const Register = () => {
             className="w-full border rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             id="name"
             type="text"
+            autocomplete="off"
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -41,6 +48,7 @@ const Register = () => {
             Email
           </label>
           <input
+           autocomplete="off"
             className="w-full border rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
             type="email"
