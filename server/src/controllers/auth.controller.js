@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ApiError = require("../utils/ApiError");
 const error = require("../utils/customError");
+
 const register = async (req, res) => {
   try {
     const { email, password, name } = await req.payload;
@@ -10,6 +11,7 @@ const register = async (req, res) => {
     if (existedUser) {
       throw new ApiError(404, "User With this Email Already Exist");
     }
+
     const hashedPass = await bcrypt.hash(password, 10);
 
     const user = await User.create({
@@ -18,7 +20,7 @@ const register = async (req, res) => {
       password: hashedPass,
     });
 
-    console.log(user);
+   
 
     return res
       .response({
@@ -27,7 +29,7 @@ const register = async (req, res) => {
       })
       .code(201);
   } catch (err) {
-    throw error({ message: err.message }, err.message);
+    throw error({ message: err.message,status: "failure"}, err.message);
   }
 };
 
@@ -35,9 +37,6 @@ const login = async (req, res) => {
   try {
     const { email, password } = await req.payload;
 
-    if ([email, password].some((field) => field?.trim() === "")) {
-      throw new ApiError(400, "Email and Password Required");
-    }
 
     const user = await User.findOne({
       where: { email: email },
@@ -87,13 +86,7 @@ const login = async (req, res) => {
       .state("accessToken", accessToken, options)
       .code(200);
   } catch (err) {
-    console.log(err);
-    const error = {
-      statusCode: err.statusCode,
-      status: "failed",
-      message: err.message,
-    };
-    return res.response(error).code(err.statusCode);
+     throw error({ message: err.message,status: "failure"}, err.message)
   }
 };
 
@@ -111,13 +104,7 @@ const logout = async (req, res) => {
       .unstate("accessToken", options)
       .code(201);
   } catch (err) {
-    console.log(err);
-    const error = {
-      statusCode: err.statusCode,
-      status: "failed",
-      message: err.message,
-    };
-    return res.response(error).code(err.statusCode);
+    throw error({ message: err.message,status: "failure"}, err.message)
   }
 };
 
@@ -133,13 +120,7 @@ const getUser = async (req, res) => {
       })
       .code(200);
   } catch (err) {
-    console.log(err);
-    const error = {
-      statusCode: err.statusCode,
-      status: "failed",
-      message: err.message,
-    };
-    return res.response(error).code(err.statusCode);
+    throw error({ message: err.message,status: "failure"}, err.message)
   }
 };
 

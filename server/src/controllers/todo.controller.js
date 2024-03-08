@@ -1,4 +1,6 @@
 const { Todo } = require("../models");
+// const ApiError = require("../utils/ApiError");
+const error = require("../utils/customError");
 
 const createTodos = async (req, res) => {
   try {
@@ -17,9 +19,8 @@ const createTodos = async (req, res) => {
       },
       message: "Todo created Successfully",
     });
-  } catch (error) {
-    console.log(error);
-    return error;
+  } catch (err) {
+    throw error({ message: err.message,status: "failure"}, err.message)
   }
 };
 
@@ -47,13 +48,7 @@ const updateTodos = async (req, res) => {
     });
 
   } catch (err) {
-    console.log(err);
-    const error = {
-      statusCode: err.statusCode,
-      status: "failed",
-      message: err.message,
-    };
-    return res.response(error).code(err.statusCode);
+    throw error({ message: err.message,status: "failure"}, err.message)
   }
 };
 
@@ -69,9 +64,8 @@ const fetchTodosByUser = async (req, res) => {
         message: "Fetched all todos Successfully",
       })
       .code(200);
-  } catch (error) {
-    console.log(error);
-    return error;
+  } catch (err) {
+    throw error({ message: err.message,status: "failure"}, err.message)
   }
 };
 
@@ -94,8 +88,8 @@ const deleteTodo = async (req, res) => {
       },
       message: "todo deleted successfully",
     });
-  } catch (error) {
-    return error;
+  } catch (err) {
+    throw error({ message: err.message,status: "failure"}, err.message)
   }
 };
 
