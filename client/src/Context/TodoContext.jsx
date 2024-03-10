@@ -47,16 +47,20 @@ const TodoProvider = ({ children }) => {
     }
   };
 
-  const editTodo = async (id, completed) => {
+  const editTodo = async (id, data) => {
     try {
-      const response = await axios.put(`/todo/update/${id}`, {
-        completed: !completed,
-      });
+      console.log(data);
+      const response = await axios.put(`/todo/update/${id}`,data);
       console.log(response.data);
       if (response.data.status === "Success") {
         const update = todo?.map((todo) => {
           if (todo.id === id) {
-            todo.completed = !completed;
+             
+              todo.task = data?.task;
+              todo.description = data?.description;
+              todo.completed = data?.completed;
+            
+              
           }
 
           return todo;

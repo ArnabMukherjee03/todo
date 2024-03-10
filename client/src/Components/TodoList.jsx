@@ -1,10 +1,30 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { todoContext } from "../Context/TodoContext";
 import { MdDelete } from "react-icons/md";
+import { CiEdit,CiSaveUp2 } from "react-icons/ci";
 
 export const TodoList = () => {
   const { todo, deleteTodo, editTodo } = useContext(todoContext);
+  const [edit,setEdit] = useState(null);
 
+  const [updateData,setUpdateData] = useState({
+    task: "",
+    description: ""
+  })
+
+  const handleChange = (event)=>{
+    const { name, value } = event.target; 
+    setUpdateData({ ...updateData, [name]: value });
+  }
+
+
+
+  const handleUpdate = ()=>{
+    editTodo(edit,updateData);
+    setEdit(null);
+  }
+
+  console.log(edit);
  
   return (
     <div className="mt-8 w-[40%] flex flex-col gap-4">
@@ -19,20 +39,39 @@ export const TodoList = () => {
             <div className="w-[10%] flex justify-center items-center">
               <input
                 type="checkbox"
+                disabled={edit}
                 checked={todo?.completed}
-                className="w-4 h-4 cursor-pointer"
+                className="w-4 h-4 cursor-pointer disabled:cursor-not-allowed"
                 onChange={(e) => {
-                  editTodo(todo.id, todo?.completed);
+                  editTodo(todo.id, {task:todo?.task,description:todo?.description,completed: !todo?.completed});
                 }}
               />
             </div>
             <div className="w-[90%] font-primary text-lg">
+              {
+              edit && todo?.id === edit?
+              <form className="flex flex-col">
+                  <input className="w-[80%] h-6" onChange={handleChange} value={updateData?.task} type="text" id="task" name="task" />
+                  <input className="w-[80%] h-8" onChange={handleChange} value={updateData?.description} name="description" id="description" />
+              </ form>
+              :
+              <>
               <p className={`${todo?.completed ? "line-through" : ""}`}>
                 {todo?.task}
               </p>
               <p className="text-sm">{todo?.description}</p>
+              </>
+               }       
             </div>
             <p className="absolute right-0 bottom-0 text-sm font-primary">{todo?.createdAt.slice(0, 10)}</p>
+            <div  className="absolute top-0 right-6 cursor-pointer">
+              {
+              edit && todo?.id === edit?
+              <CiSaveUp2 onClick={handleUpdate} className="text-lg"/>
+              :
+              !todo.completed?<CiEdit onClick={()=>{setEdit(todo?.id); setUpdateData({task: todo?.task, description: todo?.description})}} className="text-lg"/>:""
+              }
+            </div>
             <div
               className="text-red-500 absolute  top-0 right-0 cursor-pointer"
               onClick={() => {
