@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { createContext, useState } from "react";
 import axios from "axios";
+import toast from 'react-hot-toast';
 
 export const todoContext = createContext();
 
@@ -12,7 +13,7 @@ const TodoProvider = ({ children }) => {
       const response = await axios.post("/todo/get");
       setTodo(response?.data?.data?.todo);
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.data?.message)
     }
   };
 
@@ -20,10 +21,11 @@ const TodoProvider = ({ children }) => {
     try {
       const response = await axios.post("/todo/create", data);
       const newData = [...todo, response?.data?.data?.todo];
+      toast.success("Todo Created Successfully");
       setTodo(newData);
       return true;
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.data?.message)
       return false;
       
     }
@@ -41,7 +43,7 @@ const TodoProvider = ({ children }) => {
         setTodo(updated_todo);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.data?.message)
     }
   };
 
@@ -63,7 +65,7 @@ const TodoProvider = ({ children }) => {
        setTodo(update);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.data?.message)
     }
   };
 

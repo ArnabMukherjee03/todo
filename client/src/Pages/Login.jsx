@@ -17,13 +17,15 @@ const Login = () => {
       password: password,
     });
 
+   
+
     if (response?.status === "Success") {
       navigate("/dashboard");
     }
   };
 
   useEffect(() => {
-    if (token) {
+    if(token) {
       navigate("/dashboard");
     }
   }, [token, navigate]);

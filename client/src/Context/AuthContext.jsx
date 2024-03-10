@@ -1,50 +1,41 @@
-/* eslint-disable react/prop-types */
 import {createContext, useState } from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom"
 import {useCookies} from "react-cookie"
+import toast from 'react-hot-toast';
 
 export const authContext = createContext();
 
 const AuthProvider = ({children})=>{
-    const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
     const [loading,setLoading] = useState(false);
     const navigate = useNavigate();
     
-    // const checkAuth = async()=>{
-    //     try {
-    //         const response = await axios.get("/auth/getuser");
-    //         console.log(response.data.data.user.id);
-    //     } catch (error) {
-    //         console.log(error)
-          
-    //     }
-    // }
-
     const handleRegister = async(data)=>{
         setLoading(true)
         try {
             const response = await axios.post("/auth/register",data);
+            console.log(response.data.status)
             if(response.data.status === "Success"){
                 navigate("/login");
             }
         } catch (error) {
-            console.log(error)
+            toast.error(error?.response?.data?.message)
         }finally{
             setLoading(false)
         }
     }
 
-    console.log(cookies);
+   
 
     const handleLogin = async(data)=>{
         setLoading(true)
         try {
             const response = await axios.post("/auth/login",data);
-            setCookie('accessToken',response.data?.data?.accessToken,{ path: '/' });
+            setCookie('token',response.data?.data?.accessToken,{ path: '/' });
             return response.data;
         } catch (error) {
-            console.log(error)
+            toast.error(error?.response?.data?.message)
         }finally{
             setLoading(false)
         }
@@ -55,16 +46,17 @@ const AuthProvider = ({children})=>{
             const response = await axios.get("/auth/logout");
             
             if(response?.data.status === "Success"){
-                removeCookie('accessToken', { path: '/' });
+                removeCookie('token', { path: '/' });
                 navigate("/login");
             }       
 
         } catch (error) {
-            console.log(error);
+            toast.error(error?.response?.data?.message)
         }
     }
 
-    const token = cookies?.accessToken ;
+    console.log(cookies);
+    const token = cookies?.token;
 
     return <authContext.Provider value={{token,handleLogin,loading,handleLogout,handleRegister}}>
         {children}
