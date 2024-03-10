@@ -3,10 +3,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ApiError = require("../utils/ApiError");
 const error = require("../utils/customError");
+const response = require("../utils/ApiResponse");
 
 const register = async (req, res) => {
   try {
     const { email, password, name } = await req.payload;
+
     const existedUser = await User.findOne({ where: { email: email } });
     if (existedUser) {
       throw new ApiError(404, "User With this Email Already Exist");
@@ -20,23 +22,15 @@ const register = async (req, res) => {
       password: hashedPass,
     });
 
-   
-
-    return res
-      .response({
-        status: "Success",
-        message: "User Created Successfully",
-      })
-      .code(201);
+    return response(res, null, "User Created Successfully", 201);
   } catch (err) {
-    throw error({ message: err.message,status: "failure"}, err.message);
+    throw error({ message: err.message, status: "failure" }, err.message);
   }
 };
 
 const login = async (req, res) => {
   try {
     const { email, password } = await req.payload;
-
 
     const user = await User.findOne({
       where: { email: email },
@@ -72,21 +66,18 @@ const login = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
+      path: "/",
     };
 
-    return res
-      .response({
-        status: "Success",
-        data: {
-          user: loggedinUser,
-          accessToken,
-        },
-        message: "User Logged In Successfully",
-      })
-      .state("accessToken", accessToken, options)
-      .code(200);
+    return response(
+      res,
+      { user: loggedinUser },
+      "User Loggedin Successfully",
+      200,
+      { accessToken: accessToken }
+    ).state("accessToken", accessToken, options);
   } catch (err) {
-     throw error({ message: err.message,status: "failure"}, err.message)
+    throw error({ message: err.message, status: "failure" }, err.message);
   }
 };
 
@@ -95,32 +86,25 @@ const logout = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
+      path: "/",
     };
-    return res
-      .response({
-        status: "Success",
-        message: "User Logged Out Successfully",
-      })
+    return response(res, null, "User Log Out Successfully", 200)
       .unstate("accessToken", options)
-      .code(201);
   } catch (err) {
-    throw error({ message: err.message,status: "failure"}, err.message)
+    throw error({ message: err.message, status: "failure" }, err.message);
   }
 };
 
 const getUser = async (req, res) => {
   try {
-    return res
-      .response({
-        status: "Success",
-        data: {
-          user: req.user,
-        },
-        message: "User Fetched Successfully",
-      })
-      .code(200);
+    return response(
+      res,
+      { user: req.user },
+      "User Fetched Succesfully",
+      200
+    );
   } catch (err) {
-    throw error({ message: err.message,status: "failure"}, err.message)
+    throw error({ message: err.message, status: "failure" }, err.message);
   }
 };
 
