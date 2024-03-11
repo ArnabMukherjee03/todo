@@ -1,12 +1,10 @@
 const fs = require('fs');
 
-console.log(process.env.DB_PASSWORD);
-
 module.exports = {
   development: {
-    username: "root",
-    password: "123456",
-    database: "todo",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     host: '127.0.0.1',
     port: 3306,
     dialect: 'mysql',
