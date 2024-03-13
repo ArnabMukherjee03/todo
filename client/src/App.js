@@ -6,8 +6,10 @@ import Dashboard from "./Pages/Dashboard";
 import Protected from "./Protected/Protected";
 import { Toaster } from 'react-hot-toast';
 
+
 function App() {
-  
+
+
   return (
     <>
      <Toaster

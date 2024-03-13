@@ -4,8 +4,7 @@ const error = require("../utils/customError");
 
 const createTodos = async (req, res) => {
   try {
-    const { task } = req.payload;
-
+    
     const todo = await Todo.create({ ...req.payload, user: req.user.id });
 
     return response(res, { todo: todo }, "Todo Created Successfully", 201);
@@ -34,9 +33,28 @@ const updateTodos = async (req, res) => {
 
 const fetchTodosByUser = async (req, res) => {
   try {
-    const todos = await Todo.findAll({ where: { user: req.user.id } });
-    return response(res, { todo: todos }, "Todo Fetched Successfully", 200);
+    let { page = 1, limit = 10 } = req.query;
+  
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    const offset = (page - 1) * limit;
+
+    console.log(limit);
+   
+    const todos = await Todo.findAll({
+      where: { user: req.user.id },
+      limit: limit,
+      offset: offset,
+      order: [['createdAt', 'DESC']]
+    });
+
+    const totalCount = await Todo.count({ where: { user: req.user.id } });
+    const totalPages = Math.ceil(totalCount / limit);
+    
+    return response(res, { todo: todos, totalPages}, "Todo Fetched Successfully", 200);
   } catch (err) {
+    console.log(err);
     throw error({ message: err.message, status: "failure" }, err.message);
   }
 };

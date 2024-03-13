@@ -1,11 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { todoContext } from "../Context/TodoContext";
 import { MdDelete } from "react-icons/md";
 import { CiEdit,CiSaveUp2 } from "react-icons/ci";
+import { Pagination } from "./Pagination";
 
 export const TodoList = () => {
-  const { todo, deleteTodo, editTodo } = useContext(todoContext);
+  const { todo, deleteTodo, editTodo, getTodo,current} = useContext(todoContext);
   const [edit,setEdit] = useState(null);
+
+
+  useEffect(()=>{
+    getTodo();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[current])
+
+
 
   const [updateData,setUpdateData] = useState({
     task: "",
@@ -24,7 +33,7 @@ export const TodoList = () => {
     setEdit(null);
   }
 
-  console.log(edit);
+  
  
   return (
     <div className="mt-8 w-[40%] flex flex-col gap-4">
@@ -80,11 +89,15 @@ export const TodoList = () => {
             >
               <MdDelete className="w-full text-lg" />
             </div>
+            
           </div>
         );
       }):
       (<div className="text-red text-lg font-primary text-red-500 p-8 text-center">No Data Found</div>)
       }
+
+      {/* Pagination */}
+      <Pagination/>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useState } from "react";
+import { createContext,useState } from "react";
 import axios from "axios";
 import toast from 'react-hot-toast';
 
@@ -7,22 +7,27 @@ export const todoContext = createContext();
 
 const TodoProvider = ({ children }) => {
   const [todo, setTodo] = useState([]);
+  const [total,setTotal] = useState(0);
+  const [current,setCurrent] = useState(1);
 
+  console.log(todo);
   const getTodo = async () => {
-    try {
-      const response = await axios.post("/todo/get");
-      setTodo(response?.data?.data?.todo);
-    } catch (error) {
-      toast.error(error?.response?.data?.message)
-    }
-  };
-
+      try {
+        const response = await axios.post(`/todo/get?page=${current}&limit=5`);
+        const responseData = response?.data?.data;
+        setTodo(responseData.todo);
+        setTotal(responseData.totalPages);
+      } catch (error) {
+        toast.error(error?.response?.data?.message)
+      }
+    };
+  
   const addTodo = async (data) => {
     try {
       const response = await axios.post("/todo/create", data);
-      const newData = [...todo, response?.data?.data?.todo];
+      const newData = [response?.data?.data?.todo,...todo];
       toast.success("Todo Created Successfully");
-      setTodo(newData);
+      setTodo(newData.slice(0,5));
       return true;
     } catch (error) {
       toast.error(error?.response?.data?.message)
@@ -34,13 +39,8 @@ const TodoProvider = ({ children }) => {
   const deleteTodo = async (id) => {
     try {
       const response = await axios.delete(`/todo/${id}`);
-      console.log(response.data.status);
       if (response.data.status === "Success") {
-        const updated_todo = todo.filter((todo) => {
-          return todo.id !== id;
-        });
-
-        setTodo(updated_todo);
+        getTodo();
       }
     } catch (error) {
       toast.error(error?.response?.data?.message)
@@ -49,7 +49,6 @@ const TodoProvider = ({ children }) => {
 
   const editTodo = async (id, data) => {
     try {
-      console.log(data);
       const response = await axios.put(`/todo/update/${id}`,data);
       console.log(response.data);
       if (response.data.status === "Success") {
@@ -73,9 +72,10 @@ const TodoProvider = ({ children }) => {
     }
   };
 
+  
   return (
     <todoContext.Provider
-      value={{ getTodo, todo, deleteTodo, addTodo, editTodo }}
+      value={{ getTodo, todo, deleteTodo, addTodo, editTodo, total,current,setCurrent}}
     >
       {children}
     </todoContext.Provider>

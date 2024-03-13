@@ -14,7 +14,8 @@ export const AddTodo = () => {
     setTodo({ ...todo, [name]: value });
   }
 
-  const submit = async()=>{
+  const submit = async(e)=>{
+    e.preventDefault()
      const response = await addTodo(todo);
 
      if(response){
@@ -28,7 +29,7 @@ export const AddTodo = () => {
 
   return (
     <div className='w-[40%]'>
-    <div className="mb-4 flex flex-col gap-2 font-primary">
+    <form onSubmit={submit} className="mb-4 flex flex-col gap-2 font-primary">
     <input
       type="text"
       value={todo.task}
@@ -45,13 +46,12 @@ export const AddTodo = () => {
       placeholder="Add todo description"
       className="border border-blue-600 p-2 outline-none"
     />
-    </div>
     <button
       className="bg-blue-600 text-white py-2 px-4 w-[30%] text-center font-primary float-left"
-      onClick={submit}
     >
       Add Todo
     </button>
+    </form>
   </div>
   )
 }

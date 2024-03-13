@@ -4,9 +4,7 @@ import { authContext } from "../Context/AuthContext"
 
 export const Landing = () => {
   const {token} = useContext(authContext);
-
-  console.log(token);
-  
+ 
   return (
     <section className="font-primary container flex items-center justify-center h-screen flex-col gap-4">
     <h1 className="text-4xl">Welcome To Todo App</h1>
