@@ -1,6 +1,7 @@
 const { Todo } = require("../models");
 const response = require("../utils/ApiResponse");
 const error = require("../utils/customError");
+const {Op} = require("sequelize")
 
 const createTodos = async (req, res) => {
   try {
@@ -33,7 +34,7 @@ const updateTodos = async (req, res) => {
 
 const fetchTodosByUser = async (req, res) => {
   try {
-    let { page = 1, limit = 10 } = req.query;
+    let { page = 1, limit = 10, completed= null,search=null} = req.query;
   
     page = parseInt(page);
     limit = parseInt(limit);
@@ -41,15 +42,27 @@ const fetchTodosByUser = async (req, res) => {
     const offset = (page - 1) * limit;
 
     console.log(limit);
-   
+
+    let whereCondition = {user: req.user.id};
+
+    if(completed){
+      completed = completed === "true"? true : false
+      whereCondition = { user: req.user.id, completed: completed}
+    }
+
+    if(search){
+      whereCondition = { user: req.user.id, description: { [Op.like]: `%${search}%` }}
+    }
+
+   console.log(whereCondition);
     const todos = await Todo.findAll({
-      where: { user: req.user.id },
+      where: whereCondition,
       limit: limit,
       offset: offset,
       order: [['createdAt', 'DESC']]
     });
 
-    const totalCount = await Todo.count({ where: { user: req.user.id } });
+    const totalCount = await Todo.count({ where: whereCondition});
     const totalPages = Math.ceil(totalCount / limit);
     
     return response(res, { todo: todos, totalPages}, "Todo Fetched Successfully", 200);

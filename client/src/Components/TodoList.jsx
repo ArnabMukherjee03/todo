@@ -3,16 +3,17 @@ import { todoContext } from "../Context/TodoContext";
 import { MdDelete } from "react-icons/md";
 import { CiEdit,CiSaveUp2 } from "react-icons/ci";
 import { Pagination } from "./Pagination";
+import Dropdown from "./DropDown";
 
 export const TodoList = () => {
-  const { todo, deleteTodo, editTodo, getTodo,current} = useContext(todoContext);
+  const { todo, deleteTodo, editTodo, getTodo,current,subDropdown,search} = useContext(todoContext);
   const [edit,setEdit] = useState(null);
 
 
   useEffect(()=>{
     getTodo();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[current])
+  },[current,subDropdown,search])
 
 
 
@@ -37,7 +38,7 @@ export const TodoList = () => {
  
   return (
     <div className="mt-8 w-[40%] flex flex-col gap-4">
-      
+      <Dropdown/>
       {todo.length !== 0?
       todo?.map((todo) => {
         return (
