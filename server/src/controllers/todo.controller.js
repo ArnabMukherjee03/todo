@@ -47,15 +47,13 @@ const fetchTodosByUser = async (req, res) => {
 
     if(completed){
       completed = completed === "true"? true : false
-      whereCondition = { user: req.user.id, completed: completed}
+      whereCondition = { ...whereCondition, completed: completed}
     }
-
 
     if(search){
-      whereCondition = { user: req.user.id, description: { [Op.like]: `%${search}%` }}
+      whereCondition = { ...whereCondition, description: { [Op.like]: `%${search}%` }}
     }
 
-   console.log(whereCondition);
     const todos = await Todo.findAll({
       where: whereCondition,
       limit: limit,
