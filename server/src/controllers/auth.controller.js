@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const ApiError = require("../utils/ApiError");
 const error = require("../utils/customError");
 const response = require("../utils/ApiResponse");
+const { sendMail } = require("../utils/mailService");
 
 const register = async (req, res) => {
   try {
@@ -20,7 +21,36 @@ const register = async (req, res) => {
       name: name,
       email: email,
       password: hashedPass,
-    });
+    }, { returning: true });
+
+  
+
+    const userEmail = user.dataValues.email;
+    const subject = "Welcome to TodoApp - Registration Successful!";
+    const html = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-100">
+    
+    <div class="max-w-screen-md mx-auto p-6 bg-white rounded shadow-md">
+        <h1 class="text-2xl text-center font-bold mb-4">Registration Successful!</h1>
+        <p class="text-center text-gray-700 mb-4">Dear ${user.dataValues.name},</p>
+        <p class="text-center text-gray-700 mb-4">Your registration has been successfully completed. You are now a member of our community. Thank you for joining!</p>
+        <p class="text-center text-gray-700 mb-4">If you have any questions or need assistance, feel free to contact us at <a href="mailto:support@example.com" class="text-blue-500">support@example.com</a>.</p>
+        <p class="text-center text-gray-700">Best regards,<br> The Example Team</p>
+    </div>
+    
+    </body>
+    </html>
+    `
+
+    
+    await sendMail({email:userEmail,subject,html});
 
     return response(res, null, "User Created Successfully", 201);
   } catch (err) {
