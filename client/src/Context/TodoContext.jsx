@@ -9,21 +9,23 @@ const TodoProvider = ({ children }) => {
   const [todo, setTodo] = useState([]);
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [subDropdown, setsubDropdown] = useState(null);
+  const [subDropdown, setsubDropdown] = useState("");
   const [search, setSearch] = useState("");
 
-  console.log(todo);
   const getTodo = async () => {
     try {
       let url = `/todo/get?page=${current}&limit=5`;
 
-      if (subDropdown) {
+      if (subDropdown.length!==0) {
         setCurrent(1);
         url =
           subDropdown === "completed"
             ? `/todo/get?page=${current}&limit=5&completed=true`
             : `/todo/get?page=${current}&limit=5&completed=false`;
       }
+
+      console.log("COntext",search);
+      console.log(search.length);
 
       if (search.length !== 0) {
         url = `/todo/get?page=${current}&limit=5&search=${search}`;
@@ -36,16 +38,17 @@ const TodoProvider = ({ children }) => {
       setTodo(responseData.todo);
       setTotal(responseData.totalPages);
     } catch (error) {
+      console.log(error);
       toast.error(error?.response?.data?.message);
     }
   };
 
   const addTodo = async (data) => {
     try {
-      const response = await axios.post("/todo/create", data);
-      const newData = [response?.data?.data?.todo, ...todo];
+      await axios.post("/todo/create", data);
       toast.success("Todo Created Successfully");
-      setTodo(newData.slice(0, 5));
+      setsubDropdown("")
+      getTodo();
       return true;
     } catch (error) {
       toast.error(error?.response?.data?.message);

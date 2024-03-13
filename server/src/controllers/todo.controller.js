@@ -50,6 +50,7 @@ const fetchTodosByUser = async (req, res) => {
       whereCondition = { user: req.user.id, completed: completed}
     }
 
+
     if(search){
       whereCondition = { user: req.user.id, description: { [Op.like]: `%${search}%` }}
     }

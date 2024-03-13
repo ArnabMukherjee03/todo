@@ -9,6 +9,7 @@ export const TodoList = () => {
   const { todo, deleteTodo, editTodo, getTodo,current,subDropdown,search} = useContext(todoContext);
   const [edit,setEdit] = useState(null);
 
+  console.log("TodoList",search);
 
   useEffect(()=>{
     getTodo();

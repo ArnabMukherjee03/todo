@@ -5,16 +5,15 @@ const Dropdown = () => {
   const [selected, setselected] = useState(null);
   
 
-  const {getTodo,subDropdown, setsubDropdown,search,setSearch} = useContext(todoContext);
+  const {subDropdown, setsubDropdown,search,setSearch} = useContext(todoContext);
 
   const handleDropdownChange = (event) => {
     setselected(event.target.value);
-    setsubDropdown(null);
+    setsubDropdown("");
   };
 
   const handleSubDropdownChange = (event) => {
     setsubDropdown(event.target.value);
-    getTodo(event.target.value);
   };
 
 
@@ -49,7 +48,7 @@ const Dropdown = () => {
           <input
             type="text"
             value={search}
-            onChange={(e)=>setSearch(e.target.value)}
+            onChange={(e)=> setSearch(e.target.value)}
             placeholder="Search..."
             className="w-60 p-2 border rounded-md outline-none border-blue-600"
           />
