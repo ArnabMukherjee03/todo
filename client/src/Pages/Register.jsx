@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'; // Make sure to have react
 import { authContext } from '../Context/AuthContext';
 
 const Register = () => {
-  const {handleRegister,token} = useContext(authContext);
+  const {handleRegister,token,loading} = useContext(authContext);
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -74,7 +74,8 @@ const Register = () => {
         </div>
         <div className="flex items-center justify-between mb-4">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          disabled = {loading}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:cursor-not-allowed "
             type="submit"
           >
             Register

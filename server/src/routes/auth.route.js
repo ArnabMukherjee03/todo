@@ -3,6 +3,8 @@ const {
   login,
   logout,
   getUser,
+  reqForgetPass,
+  resForgetPass,
 } = require("../controllers/auth.controller");
 const { verifyJwt } = require("../middlewares/auth.middleware");
 const Joi = require("joi");
@@ -35,6 +37,8 @@ const loginSchema = Joi.object({
     "any.required": "Password is required.",
   }),
 });
+
+
 
 const router = [
   {
@@ -90,6 +94,56 @@ const router = [
       ],
     },
   },
+  {
+    method: "POST",
+    path: "/auth/req/forgetpassword",
+    handler: reqForgetPass,
+    options: {
+      validate: {
+        payload: Joi.object({
+          email: Joi.string().email().required().messages({
+            "string.email": "Please enter a valid email address.",
+            "any.required": "Email is required.",
+          })
+        }),
+        failAction: (request, h, err) => {
+          const details = err.details;
+          console.log(details);
+          throw error(
+            { message: details[0].message, status: "failure" },
+            details[0].message
+          );
+        },
+      },
+    },
+  },
+  {
+    method: "POST",
+    path: "/auth/res/forgetpassword",
+    handler: resForgetPass,
+    options: {
+      validate: {
+        payload: Joi.object({
+          password: Joi.string()
+          .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/)
+          .required()
+          .messages({
+            "string.pattern.base":
+              "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.",
+            "any.required": "Password is required.",
+          })
+        }),
+        failAction: (request, h, err) => {
+          const details = err.details;
+          console.log(details);
+          throw error(
+            { message: details[0].message, status: "failure" },
+            details[0].message
+          );
+        },
+      },
+    },
+  }
 ];
 
 module.exports = router;

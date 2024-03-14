@@ -5,6 +5,8 @@ import Register from "./Pages/Register";
 import Dashboard from "./Pages/Dashboard";
 import Protected from "./Protected/Protected";
 import { Toaster } from 'react-hot-toast';
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
        <Route path="/" Component={Landing}/>
        <Route path="/login" Component={Login}/>
        <Route path="/register" Component={Register}/>
+       <Route path="/forgotpassword" Component={ForgotPassword}/>
+       <Route path="/resetpassword/:token" Component={ResetPassword}/>
        <Route path="/dashboard" element={<Protected>
           <Dashboard/>
        </Protected>}/>

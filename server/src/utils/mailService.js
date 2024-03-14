@@ -12,6 +12,7 @@ const transporter = nodemailer.createTransport({
 
 const sendMail = async ({email,subject,html} )=>{
    try {
+    console.log(email);
     const info = await transporter.sendMail({
       from: '"Todo App" <Todo-App.com>', 
       to: email, 
