@@ -10,9 +10,9 @@ const TodoProvider = ({ children }) => {
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
   const [subDropdown, setsubDropdown] = useState("");
-  const [search, setSearch] = useState("");
+  
 
-  const getTodo = async () => {
+  const getTodo = async (search = "") => {
     try {
       let url = `/todo/get?page=${current}&limit=5`;
 
@@ -102,8 +102,6 @@ const TodoProvider = ({ children }) => {
         setCurrent,
         subDropdown,
         setsubDropdown,
-        search,
-        setSearch,
       }}
     >
       {children}

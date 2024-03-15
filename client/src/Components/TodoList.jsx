@@ -6,15 +6,13 @@ import { Pagination } from "./Pagination";
 import Dropdown from "./DropDown";
 
 export const TodoList = () => {
-  const { todo, deleteTodo, editTodo, getTodo,current,subDropdown,search} = useContext(todoContext);
+  const { todo, deleteTodo, editTodo, getTodo,current,subDropdown} = useContext(todoContext);
   const [edit,setEdit] = useState(null);
-
-  console.log("TodoList",search);
 
   useEffect(()=>{
     getTodo();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[current,subDropdown,search])
+  },[current,subDropdown])
 
 
 

@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { todoContext } from '../Context/TodoContext';
+import { useDebounce } from '../hooks/useDebounce';
 
 const Dropdown = () => {
   const [selected, setselected] = useState(null);
-  
+  const [search, setSearch] = useState("");
 
-  const {subDropdown, setsubDropdown,search,setSearch} = useContext(todoContext);
+  const {subDropdown,setsubDropdown,getTodo} = useContext(todoContext);
 
   const handleDropdownChange = (event) => {
     setselected(event.target.value);
@@ -16,6 +17,15 @@ const Dropdown = () => {
     setsubDropdown(event.target.value);
   };
 
+  const debouncedSearch = useDebounce((value) => {
+     getTodo(value);
+  });
+
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearch(value)
+    debouncedSearch(search);
+  };
 
   return (
     <div className="flex flex-col space-y-4 font-primary">
@@ -48,7 +58,7 @@ const Dropdown = () => {
           <input
             type="text"
             value={search}
-            onChange={(e)=> setSearch(e.target.value)}
+            onChange={handleSearch}
             placeholder="Search..."
             className="w-60 p-2 border rounded-md outline-none border-blue-600"
           />
