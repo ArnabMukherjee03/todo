@@ -8,8 +8,9 @@
     "dev": "nodemon index.js",
     "start": "node index.js",
     "prepare": "husky",
-    "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "author": "Arnab Mukherjee",
   "license": "ISC",
@@ -29,6 +30,11 @@
     "sequelize": "^6.37.1"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
     "husky": "^9.0.11",
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5",
