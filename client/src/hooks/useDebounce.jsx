@@ -2,7 +2,7 @@ export const useDebounce = (func) => {
     let timer;
     return function (...args) {
       const context = this;
-      console.log(context);
+      console.log(context,args);
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         timer = null;

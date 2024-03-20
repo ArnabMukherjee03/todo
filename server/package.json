@@ -13,9 +13,12 @@
   "dependencies": {
     "@hapi/boom": "^10.0.1",
     "@hapi/hapi": "^21.3.3",
+    "@hapi/inert": "^7.1.0",
+    "@hapi/vision": "^7.0.3",
     "bcrypt": "^5.1.1",
     "bull": "^4.12.2",
     "dotenv": "^16.4.5",
+    "hapi-swagger": "^17.2.1",
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.2",

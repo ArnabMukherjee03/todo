@@ -41,8 +41,6 @@ const fetchTodosByUser = async (req, res) => {
 
     const offset = (page - 1) * limit;
 
-    console.log(limit);
-
     let whereCondition = {user: req.user.id};
 
     if(completed){

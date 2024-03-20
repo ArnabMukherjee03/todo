@@ -9,11 +9,13 @@ const server = Hapi.server({
     "routes": {
         "cors": {
             origin: ["http://localhost:3000"],
-            headers: ["Accept", "Content-Type"],
+            headers: ["Accept", "Content-Type", "Authorization"],
             additionalHeaders: ["X-Requested-With"]
         }
     }    
 });
+
+
 
 
 router.forEach((path)=>server.route(path));

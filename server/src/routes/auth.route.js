@@ -44,8 +44,9 @@ const router = [
   {
     method: "POST",
     path: "/auth/register",
-    handler: register,
     options: {
+      handler: register,
+      tags: ['api'],
       validate: {
         payload: registrationSchema,
         failAction: (request, h, err) => {
@@ -62,8 +63,9 @@ const router = [
   {
     method: "POST",
     path: "/auth/login",
-    handler: login,
     options: {
+      handler: login,
+      tags: ['api'],
       validate: {
         payload: loginSchema,
         failAction: (request, h, err) => {
@@ -80,13 +82,17 @@ const router = [
   {
     method: "GET",
     path: "/auth/logout",
-    handler: logout,
+    options:{
+      handler: logout,
+      tags: ['api'],
+    }
   },
   {
     method: "GET",
     path: "/auth/getuser",
     options: {
       handler: getUser,
+      tags: ['api'],
       pre: [
         {
           method: verifyJwt,
@@ -97,8 +103,9 @@ const router = [
   {
     method: "POST",
     path: "/auth/req/forgetpassword",
-    handler: reqForgetPass,
     options: {
+      handler: reqForgetPass,
+      tags: ['api'],
       validate: {
         payload: Joi.object({
           email: Joi.string().email().required().messages({
@@ -120,8 +127,9 @@ const router = [
   {
     method: "POST",
     path: "/auth/res/forgetpassword",
-    handler: resForgetPass,
     options: {
+      handler: resForgetPass,
+      tags: ['api'],
       validate: {
         payload: Joi.object({
           password: Joi.string()
