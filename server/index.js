@@ -18,7 +18,14 @@ connectDB();
         title: "Todo API Documentation",
         version: Pack.version,
       },
-
+      securityDefinitions: {
+        jwt: {
+          type: 'Access Token',
+          name: 'authorization',
+          in: 'header'
+        }
+    },
+    security: [{ jwt: [] }],
       schemes: ["http", "https"],
     };
 
