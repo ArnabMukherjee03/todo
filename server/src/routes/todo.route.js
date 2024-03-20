@@ -2,76 +2,75 @@ const {
   createTodos,
   fetchTodosByUser,
   updateTodos,
-  deleteTodo,
-} = require("../controllers/todo.controller");
-const { verifyJwt } = require("../middlewares/auth.middleware");
-const Joi = require("joi");
-const error = require("../utils/customError");
-const { name } = require("../utils/queue");
+  deleteTodo
+} = require('../controllers/todo.controller')
+const { verifyJwt } = require('../middlewares/auth.middleware')
+const Joi = require('joi')
+const error = require('../utils/customError')
 
 const todoSchema = Joi.object({
   task: Joi.string().required().messages({
-    "any.required": "task is required.",
+    'any.required': 'task is required.'
   }),
-  description: Joi.string(),
-});
+  description: Joi.string()
+})
 
 const router = [
   {
-    method: "POST",
-    path: "/todo/create",
+    method: 'POST',
+    path: '/todo/create',
     options: {
-      description: "Create A New Todo",
-      notes: "Create a new to-do for the logged-in user",
+      description: 'Create A New Todo',
+      notes: 'Create a new to-do for the logged-in user',
       handler: createTodos,
-      tags: ["api"],
+      tags: ['api'],
       validate: {
         payload: todoSchema,
         failAction: (request, h, err) => {
-          const details = err.details;
-          console.log(details);
+          const details = err.details
+          console.log(details)
           throw error(
-            { message: details[0].message, status: "failure" },
-            details[0].message,
-          );
-        },
+            { message: details[0].message, status: 'failure' },
+            details[0].message
+          )
+        }
       },
       pre: [
         {
-          method: verifyJwt,
-        },
-      ],
-    },
+          method: verifyJwt
+        }
+      ]
+    }
   },
   {
-    method: "POST",
-    path: "/todo/get",
+    method: 'POST',
+    path: '/todo/get',
     options: {
       handler: fetchTodosByUser,
-      tags: ["api"],
+      tags: ['api'],
       pre: [
         {
-          method: verifyJwt,
-        },
-      ],
-    },
+          method: verifyJwt
+        }
+      ]
+    }
   },
   {
-    method: "PUT",
-    path: "/todo/update/{id}",
+    method: 'PUT',
+    path: '/todo/update/{id}',
     options: {
       handler: updateTodos,
-      tags: ["api"],
-    },
+      tags: ['api']
+    }
   },
   {
-    method: "DELETE",
-    path: "/todo/{id}",
+    method: 'DELETE',
+    path: '/todo/{id}',
     options: {
       handler: deleteTodo,
-      tags: ["api"],
-    },
-  },
-];
+      tags: ['api']
+    }
+  }
+]
 
-module.exports = router;
+module.exports = router

@@ -19,8 +19,8 @@ const registerTemplate = ({ name }) => {
     
     </body>
     </html>
-    `;
-};
+    `
+}
 
 const forgotPassEmail = ({ name, resetLink, validity }) => {
   return `<!DOCTYPE html>
@@ -42,8 +42,8 @@ const forgotPassEmail = ({ name, resetLink, validity }) => {
         </div>
     </body>
     </html>
-    `;
-};
+    `
+}
 
 const updatepass = () => {
   return `<!DOCTYPE html>
@@ -109,11 +109,11 @@ const updatepass = () => {
     </body>
     
     </html>
-    `;
-};
+    `
+}
 
 module.exports = {
   registerTemplate,
   forgotPassEmail,
-  updatepass,
-};
+  updatepass
+}

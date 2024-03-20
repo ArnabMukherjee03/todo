@@ -1,13 +1,13 @@
 const response = (res, data = {}, message, statuscode, additional) => {
   const response = {
-    status: "Success",
+    status: 'Success',
     data: {
       ...data,
-      ...additional,
+      ...additional
     },
-    message: message,
-  };
-  return res.response(response).code(statuscode);
-};
+    message
+  }
+  return res.response(response).code(statuscode)
+}
 
-module.exports = response;
+module.exports = response
