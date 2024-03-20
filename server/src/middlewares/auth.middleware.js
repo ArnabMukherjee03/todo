@@ -1,29 +1,28 @@
 const ApiError = require("../utils/ApiError");
 const jwt = require("jsonwebtoken");
-const Boom = require('@hapi/boom');
-const {User} = require("../models")
+const Boom = require("@hapi/boom");
+const { User } = require("../models");
 
-exports.verifyJwt = async (req,res)=>{
-      
-        const accessToken = req.state?.accessToken || req.headers.authorization?.replace("Bearer ", "");
-        
-        if(!accessToken){
-            throw Boom.badRequest("Unauthorized access");
-        }
+exports.verifyJwt = async (req, res) => {
+  const accessToken =
+    req.state?.accessToken || req.headers.authorization?.replace("Bearer ", "");
 
-        const decodedToken = jwt.verify(accessToken,process.env.TOKEN_SECRET);
+  if (!accessToken) {
+    throw Boom.badRequest("Unauthorized access");
+  }
 
-        const user = await User.findOne({
-            where: {id: decodedToken.id},
-            attributes: {exclude: ['password']}
-         })
+  const decodedToken = jwt.verify(accessToken, process.env.TOKEN_SECRET);
 
-         if(!user){
-            throw Boom.badRequest("Invalid Access Token");
-         }
+  const user = await User.findOne({
+    where: { id: decodedToken.id },
+    attributes: { exclude: ["password"] },
+  });
 
-         req.user = decodedToken;
+  if (!user) {
+    throw Boom.badRequest("Invalid Access Token");
+  }
 
-        return res.continue;
-    
-}
+  req.user = decodedToken;
+
+  return res.continue;
+};

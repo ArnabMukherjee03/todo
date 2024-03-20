@@ -2,10 +2,9 @@ require("dotenv").config();
 const server = require("./src/app");
 const { connectDB } = require("./src/db/database");
 const hapiSwagger = require("hapi-swagger");
-const Inert = require('@hapi/inert');
-const Vision = require('@hapi/vision');
-const Pack = require("./package.json")
-
+const Inert = require("@hapi/inert");
+const Vision = require("@hapi/vision");
+const Pack = require("./package.json");
 
 // Database Connection
 connectDB();
@@ -20,12 +19,12 @@ connectDB();
       },
       securityDefinitions: {
         jwt: {
-          type: 'Access Token',
-          name: 'authorization',
-          in: 'header'
-        }
-    },
-    security: [{ jwt: [] }],
+          type: "Access Token",
+          name: "authorization",
+          in: "header",
+        },
+      },
+      security: [{ jwt: [] }],
       schemes: ["http", "https"],
     };
 
@@ -38,10 +37,9 @@ connectDB();
       },
     ]);
 
-
     await server.start();
     console.log(`Server is running at ${server.info.uri}`);
   } catch (error) {
-    console.log("Something Went Wrong",error);
+    console.log("Something Went Wrong", error);
   }
 })();

@@ -1,5 +1,5 @@
-const registerTemplate = ({name})=>{
-    return `<!DOCTYPE html>
+const registerTemplate = ({ name }) => {
+  return `<!DOCTYPE html>
     <html lang="en">
     <head>
     <meta charset="UTF-8">
@@ -19,11 +19,11 @@ const registerTemplate = ({name})=>{
     
     </body>
     </html>
-    `
-}
+    `;
+};
 
-const forgotPassEmail = ({name,resetLink,validity})=>{
-    return `<!DOCTYPE html>
+const forgotPassEmail = ({ name, resetLink, validity }) => {
+  return `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -42,12 +42,11 @@ const forgotPassEmail = ({name,resetLink,validity})=>{
         </div>
     </body>
     </html>
-    `
-}
+    `;
+};
 
-
-const updatepass = ()=>{
-    return `<!DOCTYPE html>
+const updatepass = () => {
+  return `<!DOCTYPE html>
     <html lang="en">
     
     <head>
@@ -110,11 +109,11 @@ const updatepass = ()=>{
     </body>
     
     </html>
-    `
-}
+    `;
+};
 
 module.exports = {
-    registerTemplate,
-    forgotPassEmail,
-    updatepass
-}
+  registerTemplate,
+  forgotPassEmail,
+  updatepass,
+};

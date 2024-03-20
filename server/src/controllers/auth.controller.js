@@ -28,7 +28,7 @@ const register = async (req, res) => {
         email: email,
         password: hashedPass,
       },
-      { returning: true }
+      { returning: true },
     );
 
     const userEmail = user.dataValues.email;
@@ -70,7 +70,7 @@ const login = async (req, res) => {
       process.env.TOKEN_SECRET,
       {
         expiresIn: "24h",
-      }
+      },
     );
 
     const loggedinUser = await User.findOne({
@@ -89,7 +89,7 @@ const login = async (req, res) => {
       { user: loggedinUser },
       "User Loggedin Successfully",
       200,
-      { accessToken: accessToken }
+      { accessToken: accessToken },
     ).state("accessToken", accessToken, options);
   } catch (err) {
     throw error({ message: err.message, status: "failure" }, err.message);
@@ -105,7 +105,7 @@ const logout = async (req, res) => {
     };
     return response(res, null, "User Log Out Successfully", 200).unstate(
       "accessToken",
-      options
+      options,
     );
   } catch (err) {
     throw error({ message: err.message, status: "failure" }, err.message);
@@ -144,7 +144,7 @@ const reqForgetPass = async (req, res) => {
       process.env.TOKEN_SECRET,
       {
         expiresIn: "10m",
-      }
+      },
     );
     const subject = "Forget Password Link";
     const html = forgotPassEmail({
@@ -159,7 +159,7 @@ const reqForgetPass = async (req, res) => {
       res,
       null,
       "A link send to your email to update your Password",
-      200
+      200,
     );
   } catch (err) {
     throw error({ message: err.message, status: "failure" }, err.message);
@@ -189,7 +189,7 @@ const resForgetPass = async (req, res) => {
 
     await User.update(
       { password: hashedPass },
-      { where: { email: decodedToken.email } }
+      { where: { email: decodedToken.email } },
     );
 
     const subject = "Password Update Successfully";

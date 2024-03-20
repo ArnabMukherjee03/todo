@@ -13,7 +13,7 @@ const todoSchema = Joi.object({
   task: Joi.string().required().messages({
     "any.required": "task is required.",
   }),
-  description: Joi.string()
+  description: Joi.string(),
 });
 
 const router = [
@@ -21,34 +21,34 @@ const router = [
     method: "POST",
     path: "/todo/create",
     options: {
-      description:"Create A New Todo",
+      description: "Create A New Todo",
       notes: "Create a new to-do for the logged-in user",
       handler: createTodos,
-      tags: ['api'],
-      validate:{ 
-      payload: todoSchema,
-      failAction: (request, h, err) => {
-        const details = err.details;
-        console.log(details);
-        throw error(
-          { message: details[0].message, status: "failure" },
-          details[0].message
-        );
-      }},
+      tags: ["api"],
+      validate: {
+        payload: todoSchema,
+        failAction: (request, h, err) => {
+          const details = err.details;
+          console.log(details);
+          throw error(
+            { message: details[0].message, status: "failure" },
+            details[0].message,
+          );
+        },
+      },
       pre: [
         {
           method: verifyJwt,
         },
       ],
     },
-  }
-  ,
+  },
   {
     method: "POST",
     path: "/todo/get",
     options: {
       handler: fetchTodosByUser,
-      tags: ['api'],
+      tags: ["api"],
       pre: [
         {
           method: verifyJwt,
@@ -59,18 +59,18 @@ const router = [
   {
     method: "PUT",
     path: "/todo/update/{id}",
-    options:{
+    options: {
       handler: updateTodos,
-      tags: ['api'],
-    }
+      tags: ["api"],
+    },
   },
   {
     method: "DELETE",
     path: "/todo/{id}",
-    options:{
+    options: {
       handler: deleteTodo,
-      tags: ['api']
-    }
+      tags: ["api"],
+    },
   },
 ];
 

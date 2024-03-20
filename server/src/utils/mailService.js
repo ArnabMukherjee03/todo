@@ -1,5 +1,5 @@
-const ApiError = require("./ApiError")
-const nodemailer = require("nodemailer")
+const ApiError = require("./ApiError");
+const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -10,23 +10,22 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendMail = async ({email,subject,html} )=>{
-   try {
+const sendMail = async ({ email, subject, html }) => {
+  try {
     console.log(email);
     const info = await transporter.sendMail({
-      from: '"Todo App" <Todo-App.com>', 
-      to: email, 
-      subject: subject, 
-      text: "", 
+      from: '"Todo App" <Todo-App.com>',
+      to: email,
+      subject: subject,
+      text: "",
       html: html,
     });
     return info;
-   } catch (error) {
-     throw new ApiError(500,error.message);
-   }
-    
-}
+  } catch (error) {
+    throw new ApiError(500, error.message);
+  }
+};
 
 module.exports = {
-    sendMail
-}
+  sendMail,
+};

@@ -38,15 +38,13 @@ const loginSchema = Joi.object({
   }),
 });
 
-
-
 const router = [
   {
     method: "POST",
     path: "/auth/register",
     options: {
       handler: register,
-      tags: ['api'],
+      tags: ["api"],
       validate: {
         payload: registrationSchema,
         failAction: (request, h, err) => {
@@ -54,7 +52,7 @@ const router = [
           console.log(details);
           throw error(
             { message: details[0].message, status: "failure" },
-            details[0].message
+            details[0].message,
           );
         },
       },
@@ -65,7 +63,7 @@ const router = [
     path: "/auth/login",
     options: {
       handler: login,
-      tags: ['api'],
+      tags: ["api"],
       validate: {
         payload: loginSchema,
         failAction: (request, h, err) => {
@@ -73,7 +71,7 @@ const router = [
           console.log(details);
           throw error(
             { message: details[0].message, status: "failure" },
-            details[0].message
+            details[0].message,
           );
         },
       },
@@ -82,17 +80,17 @@ const router = [
   {
     method: "GET",
     path: "/auth/logout",
-    options:{
+    options: {
       handler: logout,
-      tags: ['api'],
-    }
+      tags: ["api"],
+    },
   },
   {
     method: "GET",
     path: "/auth/getuser",
     options: {
       handler: getUser,
-      tags: ['api'],
+      tags: ["api"],
       pre: [
         {
           method: verifyJwt,
@@ -105,20 +103,20 @@ const router = [
     path: "/auth/req/forgetpassword",
     options: {
       handler: reqForgetPass,
-      tags: ['api'],
+      tags: ["api"],
       validate: {
         payload: Joi.object({
           email: Joi.string().email().required().messages({
             "string.email": "Please enter a valid email address.",
             "any.required": "Email is required.",
-          })
+          }),
         }),
         failAction: (request, h, err) => {
           const details = err.details;
           console.log(details);
           throw error(
             { message: details[0].message, status: "failure" },
-            details[0].message
+            details[0].message,
           );
         },
       },
@@ -129,29 +127,29 @@ const router = [
     path: "/auth/res/forgetpassword",
     options: {
       handler: resForgetPass,
-      tags: ['api'],
+      tags: ["api"],
       validate: {
         payload: Joi.object({
           password: Joi.string()
-          .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/)
-          .required()
-          .messages({
-            "string.pattern.base":
-              "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.",
-            "any.required": "Password is required.",
-          })
+            .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/)
+            .required()
+            .messages({
+              "string.pattern.base":
+                "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.",
+              "any.required": "Password is required.",
+            }),
         }),
         failAction: (request, h, err) => {
           const details = err.details;
           console.log(details);
           throw error(
             { message: details[0].message, status: "failure" },
-            details[0].message
+            details[0].message,
           );
         },
       },
     },
-  }
+  },
 ];
 
 module.exports = router;
